@@ -14,15 +14,33 @@ public class Ball : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		//print(paddleToBallDistance);
-		if(!gameStart){
-		  	//lock the position of the ball relative to the paddle
+		if(!gameStart && gameObject.activeSelf){
+			//lock the position of the ball relative to the paddle
 			this.transform.position = paddle.transform.position+paddleToBallDistance;
 			if(Input.GetMouseButtonDown(0)){
 				//launch the ball now 
 				//print("Left click"); // testing 
 				gameStart = true;
-				this.rigidbody2D.velocity = new Vector2(2f,10f);
-				}
+				this.GetComponent<Rigidbody2D>().velocity = new Vector2(2f,10f);
 			}
 		}
+	}
+
+	public float GetDiamater() {
+		return transform.localScale.x;
+	}
+
+	public void ExpandDiamaterByLength(float length) {
+
+		if (GetDiamater() + length <= Constants.Brick.BallSizeMax) {
+			transform.localScale += new Vector3(length, length, 0);
+		}
+	}
+
+	public void ShrinkDiamaterByLength(float length) {
+
+		if (GetDiamater() - length > Constants.Brick.BallSizeMin) {
+			transform.localScale -= new Vector3(length, length, 0);
+		}
+	}
 }
